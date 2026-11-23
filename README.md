@@ -68,4 +68,4 @@ The contact form is connected to a Supabase database. If you wish to set up your
 3. Open `script.js` and replace `supabaseUrl` and `supabaseKey` with your project's unique URL and anonymous public key.
 
 ## 📍 Location
-**Old Gajuwaka**, beside Sai Priya Function Hall, Kanithi Road, Visakhapatnam, Andhra Pradesh 530026.
+**1200 Fitness Way**, Austin, TX 78701 (demo address).

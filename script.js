@@ -71,12 +71,11 @@ const initCxrFitnessSite = () => {
     if (bmiForm) {
         bmiForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const heightCm = document.getElementById('height').value;
-            const weightKg = document.getElementById('weight').value;
+            const heightIn = document.getElementById('height').value;
+            const weightLbs = document.getElementById('weight').value;
 
-            if (heightCm > 0 && weightKg > 0) {
-                const heightM = heightCm / 100;
-                const bmi = (weightKg / (heightM * heightM)).toFixed(1);
+            if (heightIn > 0 && weightLbs > 0) {
+                const bmi = ((703 * weightLbs) / (heightIn * heightIn)).toFixed(1);
                 
                 bmiValueEl.innerText = bmi;
                 
