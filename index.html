@@ -44,7 +44,7 @@
             <p class="hero-subtitle">Experience the pinnacle of strength, discipline, and luxury fitness in a space designed for champions.</p>
             <div class="hero-actions">
                 <a href="#plans" class="btn btn-primary">Join Now <i class="fas fa-arrow-right"></i></a>
-                <a href="#contact" class="btn btn-secondary">Book Free Trial</a>
+                <a href="#book" class="btn btn-secondary" data-open-booking>Book Free Trial</a>
             </div>
         </div>
         <div class="scroll-indicator">
@@ -207,7 +207,7 @@
                         <li><i class="fas fa-times text-muted"></i> Personal Training</li>
                         <li><i class="fas fa-times text-muted"></i> Spa & Sauna</li>
                     </ul>
-                    <a href="#" class="btn btn-outline btn-block">Select Plan</a>
+                    <a href="#book" class="btn btn-outline btn-block" data-open-booking data-plan="Basic">Select Plan</a>
                 </div>
 
                 <!-- Pro Plan -->
@@ -226,7 +226,7 @@
                         <li><i class="fas fa-check"></i> 1 PT Session / month</li>
                         <li><i class="fas fa-times text-muted"></i> Spa & Sauna</li>
                     </ul>
-                    <a href="#" class="btn btn-primary btn-block">Select Plan</a>
+                    <a href="#book" class="btn btn-primary btn-block" data-open-booking data-plan="Pro">Select Plan</a>
                 </div>
 
                 <!-- Elite Plan -->
@@ -244,7 +244,7 @@
                         <li><i class="fas fa-check"></i> 4 PT Sessions / month</li>
                         <li><i class="fas fa-check"></i> Spa, Sauna & Recovery</li>
                     </ul>
-                    <a href="#" class="btn btn-outline btn-block">Select Plan</a>
+                    <a href="#book" class="btn btn-outline btn-block" data-open-booking data-plan="Elite">Select Plan</a>
                 </div>
             </div>
         </div>
@@ -373,7 +373,75 @@
         </div>
     </footer>
 
+    <!-- Free Trial Booking Modal -->
+    <div class="booking-overlay" id="booking-overlay" hidden>
+        <div class="booking-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="booking-title">
+            <button type="button" class="booking-close" id="booking-close" aria-label="Close booking form"><i class="fas fa-times"></i></button>
+            <h3 id="booking-title">Book Your <span class="accent">Free Trial</span></h3>
+            <p class="booking-sub">One free day pass with a guided tour and a 20-minute session with a certified trainer. No credit card needed.</p>
+            <form id="booking-form" novalidate>
+                <div class="booking-row">
+                    <label>Full name<input type="text" id="booking-name" autocomplete="name" required></label>
+                    <label>Email<input type="email" id="booking-email" autocomplete="email" required></label>
+                </div>
+                <div class="booking-row">
+                    <label>Phone<input type="tel" id="booking-phone" autocomplete="tel" placeholder="(512) 555-0100" required></label>
+                    <label>Interested in
+                        <select id="booking-plan">
+                            <option value="Not sure yet">Not sure yet</option>
+                            <option value="Basic">Basic ($49/mo)</option>
+                            <option value="Pro">Pro ($89/mo)</option>
+                            <option value="Elite">Elite ($149/mo)</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="booking-row">
+                    <label>Preferred date<input type="date" id="booking-date" required></label>
+                    <label>Preferred time
+                        <select id="booking-time" required>
+                            <option value="">Choose a time</option>
+                            <option>6:00 AM</option><option>8:00 AM</option><option>10:00 AM</option>
+                            <option>12:00 PM</option><option>3:00 PM</option><option>5:00 PM</option>
+                            <option>7:00 PM</option>
+                        </select>
+                    </label>
+                </div>
+                <label>Main goal
+                    <select id="booking-goal">
+                        <option>Lose weight</option><option>Build muscle</option><option>Get stronger</option>
+                        <option>Improve fitness / cardio</option><option>Just exploring</option>
+                    </select>
+                </label>
+                <button type="submit" class="btn btn-primary btn-block" id="booking-submit">Book My Free Trial</button>
+                <p class="booking-status" id="booking-status" role="status" aria-live="polite"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Assistant Chat Widget -->
+    <button type="button" class="chat-launcher" id="chat-launcher" aria-label="Chat with CXR Assistant" aria-expanded="false">
+        <i class="fas fa-comment-dots"></i>
+        <span class="chat-launcher-dot"></span>
+    </button>
+    <section class="chat-panel" id="chat-panel" aria-label="CXR Assistant chat" hidden>
+        <header class="chat-header">
+            <div class="chat-avatar"><i class="fas fa-dumbbell"></i></div>
+            <div>
+                <strong>CXR Assistant</strong>
+                <span class="chat-online">Online now &middot; replies instantly</span>
+            </div>
+            <button type="button" class="chat-close" id="chat-close" aria-label="Close chat"><i class="fas fa-times"></i></button>
+        </header>
+        <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+        <div class="chat-chips" id="chat-chips"></div>
+        <form class="chat-input" id="chat-form">
+            <input type="text" id="chat-text" placeholder="Ask about prices, hours, classes..." autocomplete="off" aria-label="Type your message">
+            <button type="submit" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </section>
+
     <!-- Scripts -->
     <script src="script.js"></script>
+    <script src="assistant.js"></script>
 </body>
 </html>

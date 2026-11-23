@@ -127,6 +127,9 @@ const initCxrFitnessSite = () => {
     const supabaseUrl = 'https://tcfeyekenssupsrnjhmy.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjZmV5ZWtlbnNzdXBzcm5qaG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzkzNDYsImV4cCI6MjA5NDkxNTM0Nn0.5HrSrzAC6q5gJnkwohDb97bxTGAraD1dVJWytQRTIT0';
 
+    // Shared with assistant.js (booking form)
+    window.CXR_SUPABASE = { url: supabaseUrl, key: supabaseKey };
+
     const showContactStatus = (message, color) => {
         if (!contactStatus) return;
         contactStatus.style.display = 'block';
