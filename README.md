@@ -11,14 +11,14 @@ CXR Fitness Club is a premium, modern, and responsive landing page for a luxury 
 - **Interactive BMI Calculator:** A built-in Body Mass Index calculator that gives instant health feedback.
 - **Dynamic Counters:** Animated statistics counters in the About section.
 - **Fully Responsive:** Adapts perfectly to desktops, tablets, and mobile devices with a custom hamburger menu.
-- **Working Contact Form:** Integrated directly with a **Supabase PostgreSQL database** using native `fetch` API to capture and store user inquiries instantly.
+- **Working Contact & Free-Trial Forms:** Messages and trial bookings are validated and saved in the browser with `localStorage`, so the site works with no server or account.
 
 ## 🛠️ Technologies Used
 
 - **HTML5** (Semantic structure)
 - **CSS3** (Custom variables, Flexbox, CSS Grid, Glassmorphism UI)
 - **Vanilla JavaScript** (DOM manipulation, scroll observation, fetch API)
-- **Supabase** (Backend as a Service / PostgreSQL database)
+- **localStorage** (saves form submissions in the browser)
 - **FontAwesome** (Icons)
 - **Google Fonts** (Bebas Neue & Poppins)
 
@@ -43,29 +43,13 @@ No special tools required! You just need a modern web browser.
    ```
    Then visit `http://localhost:8080`
 
-## 🗄️ Database Setup (Supabase)
+## 🗄️ Data Storage
 
-The contact form is connected to a Supabase database. If you wish to set up your own database to receive messages:
+Contact messages and free-trial bookings are saved in the visitor's browser under the `cxr-fitness:messages:v1` localStorage key (see `window.CXR_STORE` in `script.js`). To view them, open the browser console on the site and run:
 
-1. Create a project in [Supabase](https://supabase.com).
-2. Open the **SQL Editor** and run the following to create the table and enable anonymous inserts:
-   ```sql
-   CREATE TABLE public.contact_messages (
-       id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-       name text NOT NULL,
-       email text NOT NULL,
-       phone_number text NOT NULL,
-       message text NOT NULL,
-       created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
-   );
-
-   ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
-   
-   CREATE POLICY "Allow public inserts" 
-   ON public.contact_messages
-   FOR INSERT TO anon WITH CHECK (true);
-   ```
-3. Open `script.js` and replace `supabaseUrl` and `supabaseKey` with your project's unique URL and anonymous public key.
+```js
+CXR_STORE.list()
+```
 
 ## 📍 Location
 **1200 Fitness Way**, Austin, TX 78701 (demo address).

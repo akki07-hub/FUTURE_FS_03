@@ -120,15 +120,32 @@ const initCxrFitnessSite = () => {
         });
     }
 
-    // 6. Supabase Integration for Contact Form
+    // 6. Contact form: messages are saved in this browser (localStorage)
     const contactForm = document.getElementById('supabase-contact-form');
     const contactStatus = document.getElementById('contact-status');
     const contactSubmitBtn = document.getElementById('contact-submit-btn');
-    const supabaseUrl = 'https://tcfeyekenssupsrnjhmy.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjZmV5ZWtlbnNzdXBzcm5qaG15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzMzkzNDYsImV4cCI6MjA5NDkxNTM0Nn0.5HrSrzAC6q5gJnkwohDb97bxTGAraD1dVJWytQRTIT0';
 
-    // Shared with assistant.js (booking form)
-    window.CXR_SUPABASE = { url: supabaseUrl, key: supabaseKey };
+    // Small store shared with assistant.js (booking form).
+    // No server needed: each visitor's messages stay in their own browser.
+    const STORE_KEY = 'cxr-fitness:messages:v1';
+    let memoryMessages = [];
+    window.CXR_STORE = {
+        list() {
+            try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+            catch (_) { return memoryMessages; }
+        },
+        async save(entry) {
+            const record = {
+                id: (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()),
+                ...entry,
+                created_at: new Date().toISOString()
+            };
+            const all = [record, ...this.list()];
+            try { localStorage.setItem(STORE_KEY, JSON.stringify(all)); }
+            catch (_) { memoryMessages = all; }
+            return record;
+        }
+    };
 
     const showContactStatus = (message, color) => {
         if (!contactStatus) return;
@@ -153,26 +170,16 @@ const initCxrFitnessSite = () => {
             contactSubmitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${supabaseUrl}/rest/v1/contact_messages`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': supabaseKey,
-                        'Authorization': `Bearer ${supabaseKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        name: name,
-                        email: email,
-                        phone_number: phone,
-                        message: message
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || errorData.details || response.statusText);
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    throw new Error('Please enter a valid email address.');
                 }
+                await window.CXR_STORE.save({
+                    type: 'contact',
+                    name: name.trim(),
+                    email: email.trim(),
+                    phone_number: phone.trim(),
+                    message: message.trim()
+                });
 
                 // Success
                 contactForm.reset();

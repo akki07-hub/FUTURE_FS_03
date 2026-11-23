@@ -115,31 +115,16 @@
             });
 
             try {
-                const sb = window.CXR_SUPABASE;
-                if (!sb) throw new Error('Booking service is not configured.');
-                // Saved into the existing contact_messages table so no schema change is needed.
-                const res = await fetch(`${sb.url}/rest/v1/contact_messages`, {
-                    method: 'POST',
-                    headers: {
-                        'apikey': sb.key,
-                        'Authorization': `Bearer ${sb.key}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        name: data.name,
-                        email: data.email,
-                        phone_number: data.phone,
-                        message: `[FREE TRIAL REQUEST] Date: ${prettyDate} at ${data.time} | Plan interest: ${data.plan} | Goal: ${data.goal}`
-                    })
+                if (!window.CXR_STORE) throw new Error('Booking storage is not available.');
+                await window.CXR_STORE.save({
+                    type: 'free-trial',
+                    name: data.name,
+                    email: data.email,
+                    phone_number: data.phone,
+                    message: `[FREE TRIAL REQUEST] Date: ${prettyDate} at ${data.time} | Plan interest: ${data.plan} | Goal: ${data.goal}`
                 });
-                if (!res.ok) {
-                    let detail = res.statusText;
-                    try { const j = await res.json(); detail = j.message || j.details || detail; } catch (_) { /* ignore */ }
-                    throw new Error(detail);
-                }
                 bookingForm.reset();
-                setStatus(`You're booked, ${data.name.split(' ')[0]}! See you ${prettyDate} at ${data.time}. We'll confirm by email shortly.`, 'success');
+                setStatus(`You're booked, ${data.name.split(' ')[0]}! See you ${prettyDate} at ${data.time}. Your booking is saved.`, 'success');
             } catch (err) {
                 console.error('Booking failed:', err);
                 setStatus(`Sorry, we couldn't save your booking right now. Please call us at ${GYM.phone}.`, 'error');
